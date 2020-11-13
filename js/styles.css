@@ -1,0 +1,152 @@
+:root {
+}
+
+body {
+	margin: 2px;
+	background: #888;
+	font-family: Calibri;
+}
+
+div, table, tr, td {
+    border-spacing: 0;
+    padding: 0;
+    margin: 0;
+    white-space: nowrap;
+}
+
+img {
+    padding: 0;
+    margin: 0;
+}
+
+.fill {
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.active {
+	cursor: pointer;
+}
+
+.scale_picture {
+	width: 100%;
+	height: 100%;
+}
+
+.scale_picture img {
+	width: 100%;
+	height: 100%;
+}
+
+table.oferta {
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	vertical-align: middle;
+	background: #fff;
+}
+
+table.oferta td {
+	padding: 16px;
+	font-size: 18pt;
+}
+
+table.control {
+	width: 100%;
+	height: 100%;
+	background: #ddd;
+}
+
+td.boxcell {
+	border: solid 1px #666;
+	text-align: center;
+	vertical-align: middle;
+}
+
+td.boxtitle {
+	text-align: center;
+	vertical-align: middle;
+	padding: 2px 8px;
+	background: #555;
+	color: #fff;
+	font-size: 14pt;
+	font-weight: bold;
+}
+
+td.boxcontrol {
+	text-align: left;
+	vertical-align: middle;
+	padding: 2px 8px;
+}
+
+td.boxsel {
+	background: #88c;
+}
+
+td.left {
+	text-align: left;
+}
+td.center {
+	text-align: center;
+}
+td.right {
+	text-align: right;
+}
+td.top {
+	vertical-align: top;
+}
+td.middle {
+	vertical-align: middle;
+}
+td.bottom {
+	vertical-align: bottom;
+}
+td.info {
+	color: #006;
+	font-weight: bold;
+}
+
+ul#topon {
+	position: fixed;
+	margin: 0px;
+	padding: 0px;
+	top: 10px;
+	left: 0px;
+	list-style: none;
+	z-index:9999;
+}
+
+ul#topon li {
+	width: 50px;
+}
+
+ul#topon li a {
+	display: block;
+	margin-left: 5px;
+	width: 50px;
+	height: 40px;
+	background-color:#555;
+	background-repeat:no-repeat;
+	background-position:center center;
+	border:1px solid #aaa;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-khtml-border-radius: 10px;
+	-moz-box-shadow: 0px 4px 3px #008;
+	-webkit-box-shadow: 0px 4px 3px #008;
+}
+
+ul#topon .topon a {
+	background-image: url(/images/options.png);
+}
+
+.cmd {
+	cursor: pointer;
+	text-decoration: none;
+	font-style: italic;
+	font-weight: bold;
+	color: #06c;
+}
+

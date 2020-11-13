@@ -1,0 +1,9 @@
+table.dataTable {
+    border: solid 1px #aaa !important;
+}
+
+table.dataTable th {
+    background: var(--col-color);
+    border-color: #aaa !important;
+}
+
