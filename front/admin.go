@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github.com/massarakhsh/lik/likdom"
 	"github.com/massarakhsh/tube/one"
+	"math/rand"
+	"time"
 )
 
 func (rule *DataRule) AdminGen(sx int, sy int) likdom.Domer {
@@ -105,9 +107,12 @@ func (rule *DataRule) adminToEdit() {
 				break
 			}
 		}
-		one.NewCanal("Code", canal.Code, "Name", canal.Name, "Variant", rule.ItPage.Variant,
-			"FormatId", canal.FormatId,
-			"Source0Id", canal.Source0Id, "Source1Id", canal.Source1Id, "Source2Id", canal.Source2Id, "Source3Id", canal.Source3Id)
+		canal.ID = 0
+		canal.CreatedAt = time.Now()
+		canal.UpdatedAt = time.Now()
+		canal.Variant = rule.ItPage.Variant
+		canal.Generate = rand.Intn(1000000000)
+		canal.Save()
 		rule.SetGoPart(rule.PageGetPath())
 	}
 }
@@ -122,8 +127,17 @@ func (rule *DataRule) adminCancelEdit() {
 
 func (rule *DataRule) adminWrite() {
 	if draft,ok := one.GetCanalName(rule.ItPage.Canal, rule.ItPage.Variant); ok {
-		//if canal,ok := one.GetCanalName(rule.ItPage.Canal, 0); ok {
-		canal.Delete()
+		if canal,ok := one.GetCanalName(rule.ItPage.Canal, 0); ok {
+		} else {
+			canal = draft
+			canal.ID = 0
+			canal.CreatedAt = time.Now()
+			canal.UpdatedAt = time.Now()
+			canal.Variant = 0
+			canal.Generate = rand.Intn(1000000000)
+			canal.Save()
+		}
+		draft.Delete()
 		rule.ItPage.Variant = 0
 		rule.SetGoPart(rule.PageGetPath())
 	}

@@ -11,26 +11,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ad175b9f-026c-4b7c-b9bc-ce25431e07f6" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/front/visual.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/one/base.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/one/canal.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/one/format.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/one/one.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/one/source.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/admin.go" beforeDir="false" afterPath="$PROJECT_DIR$/front/admin.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/base.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/canal.go" beforeDir="false" afterPath="$PROJECT_DIR$/front/canal.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/cmd.go" beforeDir="false" afterPath="$PROJECT_DIR$/front/cmd.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/front.go" beforeDir="false" afterPath="$PROJECT_DIR$/front/front.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/media.go" beforeDir="false" afterPath="$PROJECT_DIR$/front/media.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/run.go" beforeDir="false" afterPath="$PROJECT_DIR$/front/run.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/show.go" beforeDir="false" afterPath="$PROJECT_DIR$/front/show.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/grid.css" beforeDir="false" afterPath="$PROJECT_DIR$/js/grid.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/grid.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/grid.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/script.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/script.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/js/styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tube.go" beforeDir="false" afterPath="$PROJECT_DIR$/tube.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/one/one.go" beforeDir="false" afterPath="$PROJECT_DIR$/one/one.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

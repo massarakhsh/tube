@@ -36,7 +36,11 @@ func (it *One) save(table string, itone interface{}) bool {
 	if it.CreatedAt.Year() < 2000 {
 		it.CreatedAt = time.Now()
 	}
-	return ODB.Table(table).Save(itone) != nil
+	if it.ID > 0 {
+		return ODB.Table(table).Save(itone) != nil
+	} else {
+		return ODB.Table(table).Create(itone) != nil
+	}
 }
 
 //	Обновить объект
