@@ -3,7 +3,6 @@
 
 body {
 	margin: 2px;
-	background: #888;
 	font-family: Calibri;
 }
 
@@ -48,6 +47,22 @@ table.oferta {
 	background: #fff;
 }
 
+.win_admin {
+}
+
+.win_visual {
+	background: #888;
+}
+
+td.win_control {
+	text-align: left;
+	vertical-align: top;
+}
+
+.win_visual td {
+	border: 1px solid #aaa;
+}
+
 table.oferta td {
 	padding: 16px;
 	font-size: 18pt;
@@ -75,14 +90,9 @@ td.boxtitle {
 	font-weight: bold;
 }
 
-td.boxcontrol {
+td.control {
 	text-align: left;
-	vertical-align: middle;
-	padding: 2px 8px;
-}
-
-td.boxsel {
-	background: #88c;
+	vertical-align: top;
 }
 
 td.left {
@@ -150,3 +160,6 @@ ul#topon .topon a {
 	color: #06c;
 }
 
+.cmd:hover {
+	text-decoration: underline;
+}

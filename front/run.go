@@ -3,6 +3,7 @@ package front
 import (
 	"github.com/massarakhsh/lik"
 	"github.com/massarakhsh/lik/likapi"
+	"github.com/massarakhsh/lik/liktable"
 	"sync"
 )
 
@@ -18,14 +19,18 @@ type DataSession struct {
 
 type DataPage struct {
 	likapi.DataPage
-	Session *DataSession
-	Canal	string
-	ToPath  string
-	NeedUrl bool
+	Session    *DataSession
+	Canal      string
+	Variant    int
+	ToPath     string
+	NeedUrl    bool
 	NeedResize bool
-	IsAdmin		bool
-	IsEdit		bool
-	PathAdmin	[]string
+	IsControl  bool
+	PathAdmin  []string
+	ListCanals *liktable.Table
+	IdCanal    lik.IDB
+	ASX, ASY   int
+	ACX, ACY   int
 }
 
 type DataPager interface {

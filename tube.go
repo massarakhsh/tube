@@ -5,6 +5,7 @@ import (
 	"github.com/massarakhsh/lik/likapi"
 	"github.com/massarakhsh/tube/front"
 	"fmt"
+	"github.com/massarakhsh/tube/one"
 	"log"
 	"net/http"
 	"os"
@@ -51,6 +52,7 @@ func getArgs() bool {
 }
 
 func router(w http.ResponseWriter, r *http.Request) {
+	lik.SetLevelInf()
 	if lik.RegExCompare(r.RequestURI, "\\.(js|css|htm|html|ico|gif|png|jpg|mp3|mp4|mpg|avi)") {
 		likapi.ProbeRouteFile(w, r, r.RequestURI)
 		return
@@ -69,6 +71,9 @@ func router(w http.ResponseWriter, r *http.Request) {
 	}
 	rule := front.BindRule(page)
 	rule.LoadRequest(r)
+	if !lik.RegExCompare(r.RequestURI, "marshal") {
+		lik.SayInfo(r.RequestURI)
+	}
 	if rule.IsShift("front") {
 		rc, json := rule.BuildFront()
 		likapi.RouteCookies(w, rule.GetAllCookies())
@@ -87,7 +92,7 @@ func main() {
 	if !getArgs() {
 		return
 	}
-	front.GoIt(Serv, Base, User, Pass)
+	one.OpenBase(Serv, Base, User, Pass)
 
 	http.HandleFunc("/", router)
 	if err := http.ListenAndServe(":"+fmt.Sprint(Port), nil); err != nil {

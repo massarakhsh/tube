@@ -1,5 +1,11 @@
 package front
 
-func (rule *DataRule) admin(sx int, sy int) likdom.Domer {
-	return rule.adminMedia(sx, sy)
+import "github.com/massarakhsh/lik/likdom"
+
+func (rule *DataRule) adminMedia(sx int, sy int) likdom.Domer {
+	return likdom.BuildString("adminMedia")
 }
+
+func (rule *DataRule) MediaExecute(cmd string) {
+}
+

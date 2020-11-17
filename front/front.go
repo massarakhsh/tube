@@ -1,6 +1,7 @@
 package front
 
 import (
+	"fmt"
 	"github.com/massarakhsh/lik"
 	"github.com/massarakhsh/lik/likdom"
 	"strings"
@@ -47,16 +48,16 @@ func (rule *DataRule) BuildPage(pater likdom.Domer) {
 
 func (rule *DataRule) BuildFront() (int,lik.Seter) {
 	rule.SeekPageSize()
-	if rule.IsShift("canal") {
-		rule.doCanal()
-	} else if rule.IsShift("admin") {
-		rule.doAdmin()
-	} else if rule.IsShift("tune") {
-		rule.doTune()
-	} else if rule.IsShift("media") {
-		rule.doMedia()
-	} else if rule.IsShift("marshal") {
+	if rule.IsShift("marshal") {
 		rule.doMarshal()
+	} else if rule.IsShift("admin") {
+		rule.ExecAdmin()
+	} else if rule.IsShift("canal") {
+		rule.ExecCanal()
+	//} else if rule.IsShift("tune") {
+	//	rule.doTune()
+	//} else if rule.IsShift("media") {
+	//	rule.doMedia()
 	}
 	return 200, rule.GetAllResponse()
 }
@@ -75,30 +76,6 @@ func (rule *DataRule) doMarshal() {
 		rule.ItPage.NeedUrl = false
 		rule.SetClientPath()
 	}
-}
-
-func (rule *DataRule) doCanal() {
-	if canal := rule.Shift(); canal != "" {
-		rule.PageSetPath("/" + canal)
-		rule.PageRedraw()
-	}
-}
-
-func (rule *DataRule) doAdmin() {
-	rule.ItPage.IsAdmin = !rule.ItPage.IsAdmin
-	rule.PageRedraw()
-}
-
-func (rule *DataRule) doTune() {
-	key := rule.Shift()
-	value := lik.StringFromXS(rule.Shift())
-	rule.AdminTuneCanal(key, value)
-	rule.PageRedraw()
-}
-
-func (rule *DataRule) doMedia() {
-	key := rule.Shift()
-	rule.MediaExecute(key)
 }
 
 func (rule *DataRule) PageRedraw() {
@@ -129,29 +106,37 @@ func (rule *DataRule) StorePage() {
 func (rule *DataRule) GenPage() likdom.Domer {
 	div := likdom.BuildItem("div","id=main", "class=fill")
 	sx,sy := rule.ItPage.GetSize()
-	var code likdom.Domer
-	if rule.ItPage.IsAdmin {
-		code = rule.AdminGen(sx -BD, sy -BD)
+	if rule.ItPage.IsControl {
+		div.AppendItem(rule.AdminGen(sx -BD, sy -BD))
 	} else {
-		code = rule.CanalGen(sx -BD, sy -BD)
-	}
-	if code != nil {
-		div.AppendItem(code)
+		div.AppendItem(rule.VisualGen(sx -BD, sy -BD))
 	}
 	return div
+}
+
+func (rule *DataRule) PageSeekPath() {
+	rule.PageSetPath(rule.PageGetPath())
 }
 
 func (rule *DataRule) PageSetPath(path string) {
 	parts := lik.PathToNames(path)
 	canal := "common"
+	variant := 0
 	if len(parts) > 0 {
 		canal = parts[0]
 		parts = parts[1:]
+		if len(parts) > 0 {
+			variant = lik.StrToInt(parts[0])
+			parts = parts[1:]
+		}
 	}
-	if canal != rule.ItPage.Canal || true {
+	if canal != rule.ItPage.Canal {
 		rule.SetCookie(canal,"canal")
 		rule.ItPage.Canal = canal
 		rule.ItPage.NeedUrl = true
+	}
+	if variant != rule.ItPage.Variant {
+		rule.ItPage.Variant = variant
 	}
 }
 
@@ -162,6 +147,9 @@ func (rule *DataRule) PageGetPath() string {
 	} else {
 		path += "common"
 	}
+	if rule.ItPage.Variant > 0 {
+		path += fmt.Sprintf("/%d", rule.ItPage.Variant)
+	}
 	return path
 }
 
@@ -169,7 +157,7 @@ func (rule *DataRule) BuildSidebar() likdom.Domer {
 	div := likdom.BuildItem("div", "class=sidebar")
 	ul := div.BuildItem("ul","id=topon")
 	ul.BuildItem("li","class=topon").
-		BuildItem("a","title=Настройка", "href=#", "onclick=topon_click()")
+		BuildItem("a","title=Настройка", "href=#", "onclick=tube_control('/admin/control')")
 	return div
 }
 

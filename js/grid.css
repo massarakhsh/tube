@@ -5,5 +5,10 @@ table.dataTable {
 table.dataTable th {
     background: var(--col-color);
     border-color: #aaa !important;
+    text-align: left;
+}
+
+table.dataTable td {
+    text-align: left;
 }
 
