@@ -3,26 +3,27 @@ package one
 import (
 	"github.com/jinzhu/gorm"
 	"github.com/massarakhsh/lik"
+	"github.com/massarakhsh/lik/likbase"
 )
 
 const KeyCanal = "canal"
 
 type Canal struct {
-	One						//	Общий объект
-	Name        string		//	Наименование
-	Code       	string		//	Код
-	Variant    	int			//	Вариант
-	Generate   	int			//	Генерация
-	FormatId	int		`gorm:"index"`	//	ID формата
-	Source0Id	int		`gorm:"index"`	//	ID источника
-	Source1Id	int		`gorm:"index"`	//	ID источника
-	Source2Id	int		`gorm:"index"`	//	ID источника
-	Source3Id	int		`gorm:"index"`	//	ID источника
+	likbase.One        //	Общий объект
+	Name        string //	Наименование
+	Code        string //	Код
+	Variant     int    //	Вариант
+	Generate    int    //	Генерация
+	FormatId    int    `gorm:"index"`	//	ID формата
+	Source0   	string   //	ID источника
+	Source1   	string   //	ID источника
+	Source2   	string   //	ID источника
+	Source3   	string   //	ID источника
 }
 
 //	Инициализация таблицы
 func InitializeCanal() {
-	if !ODB.HasTable(KeyCanal) {
+	if !likbase.ODB.HasTable(KeyCanal) {
 		DBCanal().CreateTable(&Canal{})
 	} else {
 		DBCanal().AutoMigrate(&Canal{})
@@ -31,23 +32,20 @@ func InitializeCanal() {
 
 //	Позиционирование интерфейса
 func DBCanal() *gorm.DB {
-	return ODB.Table(KeyCanal)
+	return likbase.ODB.Table(KeyCanal)
 }
 
 //	Получить объект
 func GetCanal(id lik.IDB) (Canal,bool) {
 	it := Canal{}
-	ok := it.read(KeyCanal, id, &it)
+	ok := likbase.Read(id, &it)
 	return it,ok
 }
 
 //	Новый объект
 func NewCanal(datas... interface{}) (Canal,bool) {
 	it := Canal{}
-	ok := it.create(KeyCanal, &it)
-	if ok && len(datas) > 0 {
-		ok = it.Update(datas...)
-	}
+	ok := likbase.Update(&it, datas...)
 	return it,ok
 }
 
@@ -67,19 +65,20 @@ func (it *Canal) Table() string {
 	return KeyCanal
 }
 
-//	Сохранить
-func (it *Canal) Save() bool {
-	return it.save(KeyCanal, it)
+//	Создать
+func (it *Canal) Create(datas... interface{}) bool {
+	it.ID = 0
+	return likbase.Update(it, datas...)
 }
 
 //	Изменить
 func (it *Canal) Update(datas... interface{}) bool {
-	return it.update(it, datas)
+	return likbase.Update(it, datas...)
 }
 
 //	Удалить
 func (it *Canal) Delete() {
-	it.delete(KeyCanal, it)
+	likbase.Delete(it)
 }
 
 func GetCanalName(name string, variant int) (Canal, bool) {

@@ -39,7 +39,7 @@ func (rule *DataRule) VisualGenCanal(sx int, sy int, canal *one.Canal) likdom.Do
 }
 
 func (rule *DataRule) VisualFormat1(sx int, sy int, canal *one.Canal) likdom.Domer {
-	return rule.VisualWindow(sx, sy, lik.IDB(canal.Source0Id))
+	return rule.VisualSource(sx, sy, canal.Source0)
 }
 
 func (rule *DataRule) VisualFormat4(sx int, sy int, canal *one.Canal) likdom.Domer {
@@ -47,35 +47,22 @@ func (rule *DataRule) VisualFormat4(sx int, sy int, canal *one.Canal) likdom.Dom
 	dy := sy / 2 - BD
 	code := likdom.BuildTableClass("fill")
 	if row := code.BuildTr(); row != nil {
-		row.BuildTd(MakeSizes(dx, dy)...).AppendItem(rule.VisualWindow(dx, dy, lik.IDB(canal.Source0Id)))
-		row.BuildTd(MakeSizes(dx, dy)...).AppendItem(rule.VisualWindow(dx, dy, lik.IDB(canal.Source1Id)))
+		row.BuildTd(MakeSizes(dx, dy)...).AppendItem(rule.VisualSource(dx, dy, canal.Source0))
+		row.BuildTd(MakeSizes(dx, dy)...).AppendItem(rule.VisualSource(dx, dy, canal.Source1))
 	}
 	if row := code.BuildTr(); row != nil {
-		row.BuildTd(MakeSizes(dx, dy)...).AppendItem(rule.VisualWindow(dx, dy, lik.IDB(canal.Source2Id)))
-		row.BuildTd(MakeSizes(dx, dy)...).AppendItem(rule.VisualWindow(dx, dy, lik.IDB(canal.Source3Id)))
+		row.BuildTd(MakeSizes(dx, dy)...).AppendItem(rule.VisualSource(dx, dy, canal.Source2))
+		row.BuildTd(MakeSizes(dx, dy)...).AppendItem(rule.VisualSource(dx, dy, canal.Source3))
 	}
 	return code
 }
 
-func (rule *DataRule) VisualWindow(sx int, sy int, ids lik.IDB) likdom.Domer {
+func (rule *DataRule) VisualSource(sx int, sy int, source string) likdom.Domer {
 	var code likdom.Domer
-	if ids == 0 {
-	} else if source,ok := one.GetSource(ids); !ok {
-		code = rule.VisualMessage(fmt.Sprintf("Неизвестный источник \"<b>ID=%d</b>\"", int(ids)))
-	} else {
-		code = rule.VisualSource(sx, sy, &source)
-	}
-	return code
-}
-
-func (rule *DataRule) VisualSource(sx int, sy int, source *one.Source) likdom.Domer {
-	var code likdom.Domer
-	if source != nil {
-		if lik.RegExCompare(strings.ToLower(source.Path), "(jpg|png|gif)$") {
-			code = rule.VisualImage(sx, sy, source.Path)
-		} else if lik.RegExCompare(strings.ToLower(source.Path), "(avi|mpg|mts)$") {
-			code = rule.VisualVideo(sx, sy, source.Path)
-		}
+	if lik.RegExCompare(strings.ToLower(source), "(jpg|png|gif)$") {
+		code = rule.VisualImage(sx, sy, source)
+	} else if lik.RegExCompare(strings.ToLower(source), "(avi|mpg|mts)$") {
+		code = rule.VisualVideo(sx, sy, source)
 	}
 	return code
 }

@@ -5,7 +5,6 @@ import (
 	"github.com/massarakhsh/lik/likdom"
 	"github.com/massarakhsh/tube/one"
 	"math/rand"
-	"time"
 )
 
 func (rule *DataRule) AdminGen(sx int, sy int) likdom.Domer {
@@ -107,12 +106,9 @@ func (rule *DataRule) adminToEdit() {
 				break
 			}
 		}
-		canal.ID = 0
-		canal.CreatedAt = time.Now()
-		canal.UpdatedAt = time.Now()
 		canal.Variant = rule.ItPage.Variant
 		canal.Generate = rand.Intn(1000000000)
-		canal.Save()
+		canal.Create()
 		rule.SetGoPart(rule.PageGetPath())
 	}
 }
@@ -128,14 +124,14 @@ func (rule *DataRule) adminCancelEdit() {
 func (rule *DataRule) adminWrite() {
 	if draft,ok := one.GetCanalName(rule.ItPage.Canal, rule.ItPage.Variant); ok {
 		if canal,ok := one.GetCanalName(rule.ItPage.Canal, 0); ok {
-		} else {
-			canal = draft
-			canal.ID = 0
-			canal.CreatedAt = time.Now()
-			canal.UpdatedAt = time.Now()
 			canal.Variant = 0
 			canal.Generate = rand.Intn(1000000000)
-			canal.Save()
+			canal.Update()
+		} else {
+			canal = draft
+			canal.Variant = 0
+			canal.Generate = rand.Intn(1000000000)
+			canal.Create()
 		}
 		draft.Delete()
 		rule.ItPage.Variant = 0

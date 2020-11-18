@@ -1,21 +1,22 @@
 package one
 
 import (
-	"github.com/massarakhsh/lik"
 	"github.com/jinzhu/gorm"
+	"github.com/massarakhsh/lik"
+	"github.com/massarakhsh/lik/likbase"
 )
 
 const KeyFormat = "format"
 
 type Format struct {
-	One						//	Общий объект
-	Name        string		//	Наименование
-	Code       	string		//	Код
+	likbase.One        //	Общий объект
+	Name        string //	Наименование
+	Code        string //	Код
 }
 
 //	Инициализация таблицы
 func InitializeFormat() {
-	if !ODB.HasTable(KeyFormat) {
+	if !likbase.ODB.HasTable(KeyFormat) {
 		DBFormat().CreateTable(&Format{})
 	} else {
 		DBFormat().AutoMigrate(&Format{})
@@ -24,23 +25,20 @@ func InitializeFormat() {
 
 //	Позиционирование интерфейса
 func DBFormat() *gorm.DB {
-	return ODB.Table(KeyFormat)
+	return likbase.ODB.Table(KeyFormat)
 }
 
 //	Получить объект
 func GetFormat(id lik.IDB) (Format,bool) {
 	it := Format{}
-	ok := it.read(KeyFormat, id, &it)
+	ok := likbase.Read(id, &it)
 	return it,ok
 }
 
 //	Новый объект
 func NewFormat(datas... interface{}) (Format,bool) {
 	it := Format{}
-	ok := it.create(KeyFormat, it)
-	if ok && len(datas) > 0 {
-		ok = it.Update(datas...)
-	}
+	ok := likbase.Update(&it, datas...)
 	return it,ok
 }
 
@@ -60,18 +58,19 @@ func (it *Format) Table() string {
 	return KeyFormat
 }
 
-//	Сохранить
-func (it *Format) Save() bool {
-	return it.save(KeyFormat, it)
+//	Создать
+func (it *Format) Create(datas... interface{}) bool {
+	it.ID = 0
+	return likbase.Update(it, datas)
 }
 
 //	Изменить
 func (it *Format) Update(datas... interface{}) bool {
-	return it.update(it, datas)
+	return likbase.Update(it, datas)
 }
 
 //	Удалить
 func (it *Format) Delete() {
-	it.delete(KeyFormat, it)
+	likbase.Delete(it)
 }
 
