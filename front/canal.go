@@ -57,7 +57,7 @@ func (rule *DataRule) canalsBuildList() lik.Lister {
 	var canals []one.Canal
 	one.DBCanal().Find(&canals)
 	for _, canal := range canals {
-		title := MakeNamelyCanal(canal.Code, canal.Variant)
+		title := MakeNamelyCanal(canal.Name, canal.Variant)
 		list.AddItemSet("id", canal.Id, "code", canal.Code, "name", title)
 		if canal.Code == rule.ItPage.Canal {
 			rule.ItPage.IdCanal = lik.IDB(canal.Id)

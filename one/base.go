@@ -11,7 +11,6 @@ func OpenBase(serv string, base string, user string, pass string) bool {
 	if !likbase.OpenBase(serv, base, user, pass) {
 		return false
 	}
-	InitializeFormat()
 	InitializeCanal()
 	return true
 }

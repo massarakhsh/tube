@@ -26,14 +26,12 @@ func (rule *DataRule) VisualGen(sx int, sy int) likdom.Domer {
 func (rule *DataRule) VisualGenCanal(sx int, sy int, canal *one.Canal) likdom.Domer {
 	var code likdom.Domer
 	if canal == nil {
-	} else if format,ok := one.GetFormat(lik.IDB(canal.FormatId)); !ok {
-		code = rule.VisualMessage(fmt.Sprintf("Неизвестный формат \"<b>ID=%d</b>\"", canal.FormatId))
-	} else if format.Code == "1" {
+	} else if canal.Format == "1" {
 		code = rule.VisualFormat1(sx, sy, canal)
-	} else if format.Code == "4" {
+	} else if canal.Format == "4" {
 		code = rule.VisualFormat4(sx, sy, canal)
 	} else {
-		code = rule.VisualMessage(fmt.Sprintf("Неизвестный формат \"<b>%s</b>\"", format.Code))
+		code = rule.VisualMessage(fmt.Sprintf("Неизвестный формат \"<b>%s</b>\"", canal.Format))
 	}
 	return code
 }

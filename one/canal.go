@@ -14,7 +14,7 @@ type Canal struct {
 	Code        string //	Код
 	Variant     int    //	Вариант
 	Generate    int    //	Генерация
-	FormatId    int    `gorm:"index"`	//	ID формата
+	Format    	string	 //	Формат
 	Source0   	string   //	ID источника
 	Source1   	string   //	ID источника
 	Source2   	string   //	ID источника

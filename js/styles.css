@@ -113,9 +113,15 @@ td.middle {
 td.bottom {
 	vertical-align: bottom;
 }
+
+td.title {
+	color: #000;
+	padding: 1px 8px;
+}
+
 td.info {
-	color: #006;
 	font-weight: bold;
+	padding: 1px 8px;
 }
 
 ul#topon {
@@ -154,6 +160,7 @@ ul#topon .topon a {
 
 .cmd {
 	cursor: pointer;
+	float: right;
 	text-decoration: none;
 	font-style: italic;
 	font-weight: bold;
@@ -163,3 +170,8 @@ ul#topon .topon a {
 .cmd:hover {
 	text-decoration: underline;
 }
+
+.edit {
+	font-weight: bold;
+}
+

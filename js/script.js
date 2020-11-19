@@ -144,6 +144,9 @@ function tube_control(fun) {
     } else if (fun == 'copy') {
         path = '/admin/copy';
     } else if (fun == 'delete') {
+        if (!confirm("Подтвердите удаление канала")) {
+            return;
+        }
         path = '/admin/delete';
     } else if (fun == 'create') {
         path = '/admin/create';
@@ -155,31 +158,22 @@ function tube_control(fun) {
     front_get(path);
 }
 
-function tune_canal(code, value) {
-    let answer = prompt("Новое значение:", value)
+function tube_format(item) {
+    let answer = jQuery(item).val();
+    front_get('/admin/format/' + string_to_XS(answer));
+}
+
+function tube_code(value) {
+    let answer = prompt("Новый код:", value)
     if (answer !== false && answer != value) {
-        front_get("/tune/" + code + "/" + string_to_XS(answer));
+        front_get("/admin/code/" + string_to_XS(answer));
     }
 }
 
-function tune_canal_code() {
-    let elm = jQuery("#canalcode");
-    if (elm) {
-        let code = elm.val();
-        front_get("/tune/canalcode/" + string_to_XS(code));
-    }
-}
-
-function tune_append() {
-    let answer = prompt("Укажите код нового канала:", "")
-    if (answer !== false && answer != "") {
-        front_get("/tune/append/" + string_to_XS(answer));
-    }
-}
-
-function tune_delete(idc) {
-    if (confirm("Подтвердите удаление канала " + idc)) {
-        front_get("/tune/delete");
+function tube_name(value) {
+    let answer = prompt("Новое наименование:", value)
+    if (answer !== false && answer != value) {
+        front_get("/admin/name/" + string_to_XS(answer));
     }
 }
 
