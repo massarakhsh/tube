@@ -86,9 +86,14 @@ func router(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	//if host, _ := os.Hostname(); host == "Shaman" {
-	//	Serv = "192.168.234.62"
-	//}
+	if host,err := os.Hostname(); err == nil {
+		if host == "Shaman" {
+			Serv = "192.168.234.62"
+			Base = "rptp"
+			User = "rptp"
+			Pass = "Shaman1961"
+		}
+	}
 	if !getArgs() {
 		return
 	}

@@ -58,25 +58,42 @@ func (rule *DataRule) AdminControl(sx int, sy int) likdom.Domer {
 	if canal,ok := one.GetCanalName(rule.ItPage.Canal, rule.ItPage.Variant); ok {
 		title = MakeNamelyCanal(canal.Name, canal.Variant)
 		if canal.Variant > 0 {
-			tbl.BuildTrTd().AppendItem(rule.adminCmd("Записать изменения", "write")...)
-			tbl.BuildTrTd().AppendItem(rule.adminCmd("Удалить черновик", "cancel")...)
-			tbl.BuildTrTd().BuildString("<hr>")
+			tbl.BuildTrTd().AppendItem(rule.adminControlEdit(&canal))
 		} else {
-			tbl.BuildTrTd().AppendItem(rule.adminCmd("Изменить", "edit")...)
-			tbl.BuildTrTd().AppendItem(rule.adminCmd("Копировать", "copy")...)
-			tbl.BuildTrTd().AppendItem(rule.adminCmd("Удалить", "delete")...)
-			tbl.BuildTrTd().AppendItem(rule.adminCmd("Создать новый", "create")...)
+			tbl.BuildTrTd().AppendItem(rule.adminControlCommand(&canal))
 		}
 	} else {
-		tbl.BuildTrTd().AppendItem(rule.adminCmd("Создать новый", "create")...)
+		tbl.AppendItem(rule.adminCmd("&nbsp;*&nbsp;", "Создать новый", "create"))
 	}
 	return MakeWindow("win_control", sx, sy, title, tbl)
 }
 
-func (rule *DataRule) adminCmd(text string, cmd string) []likdom.Domer {
-	return []likdom.Domer {
-		LinkTextProc("cmd", text, fmt.Sprintf("tube_control('%s')", cmd)),
+func (rule *DataRule) adminControlEdit(canal *one.Canal) likdom.Domer {
+	tbl := likdom.BuildTable()
+	tbl.AppendItem(rule.adminCmd("&nbsp;*&nbsp;", "Записать изменения", "write"))
+	tbl.AppendItem(rule.adminCmd("&nbsp;*&nbsp;", "Удалить черновик", "cancel"))
+	tbl.BuildTrTd("colspan=2").BuildString("<hr>")
+	if row := tbl.BuildTr(); row != nil {
+		row.BuildTd("Формат")
+		
 	}
+	return tbl
+}
+
+func (rule *DataRule) adminControlCommand(canal *one.Canal) likdom.Domer {
+	tbl := likdom.BuildTable()
+	tbl.AppendItem(rule.adminCmd("&nbsp;*&nbsp;", "Изменить", "edit"))
+	tbl.AppendItem(rule.adminCmd("&nbsp;*&nbsp;", "Копировать", "copy"))
+	tbl.AppendItem(rule.adminCmd("&nbsp;*&nbsp;", "Удалить", "delete"))
+	tbl.AppendItem(rule.adminCmd("&nbsp;*&nbsp;", "Создать новый", "create"))
+	return tbl
+}
+
+func (rule *DataRule) adminCmd(prompt string, text string, cmd string) likdom.Domer {
+	row := likdom.BuildItem("tr")
+	row.BuildTd().BuildString(prompt)
+	row.BuildTd().AppendItem(LinkTextProc("cmd", text, fmt.Sprintf("tube_control('%s')", cmd)))
+	return row
 }
 
 func (rule *DataRule) ExecAdmin() {
@@ -87,6 +104,10 @@ func (rule *DataRule) ExecAdmin() {
 		if rule.ItPage.Variant == 0 {
 			rule.adminToEdit()
 		}
+	} else if rule.IsShift("create") {
+		rule.adminCreate()
+	} else if rule.IsShift("delete") {
+		rule.adminDelete()
 	} else if rule.IsShift("cancel") {
 		if rule.ItPage.Variant > 0 {
 			rule.adminCancelEdit()
@@ -139,6 +160,33 @@ func (rule *DataRule) adminWrite() {
 	}
 }
 
-func makeCanalData() {
+func (rule *DataRule) adminCreate() {
+	canal := one.Canal{}
+	rule.ItPage.Variant = 1
+	canal.Code = "common"
+	canal.Name = "Новый"
+	canal.Variant = rule.ItPage.Variant
+	canal.Generate = rand.Intn(1000000000)
+	canal.FormatId = 2
+	canal.Create()
+	rule.SetGoPart(rule.PageGetPath())
+}
 
+func (rule *DataRule) adminDelete() {
+	if canal,ok := one.GetCanalName(rule.ItPage.Canal, 0); ok {
+		for variant := 1; variant < 100; variant++ {
+			if _,ok := one.GetCanalName(rule.ItPage.Canal, variant); !ok {
+				rule.ItPage.Variant = variant
+				break
+			}
+		}
+		canal.Variant = rule.ItPage.Variant
+		canal.Generate = rand.Intn(1000000000)
+		canal.Create()
+		rule.SetGoPart(rule.PageGetPath())
+	}
+}
+
+
+func makeCanalData() {
 }

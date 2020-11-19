@@ -60,7 +60,7 @@ func (it *Format) Table() string {
 
 //	Создать
 func (it *Format) Create(datas... interface{}) bool {
-	it.ID = 0
+	it.Id = 0
 	return likbase.Update(it, datas)
 }
 
