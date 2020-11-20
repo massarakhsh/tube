@@ -133,7 +133,7 @@ function tube_init() {
     });
 }
 
-function tube_control(fun) {
+function tube_command(fun) {
     let path = fun;
     if (fun == 'write') {
         path = '/admin/write';
@@ -174,6 +174,14 @@ function tube_name(value) {
     let answer = prompt("Новое наименование:", value)
     if (answer !== false && answer != value) {
         front_get("/admin/name/" + string_to_XS(answer));
+    }
+}
+
+function tube_source(ns) {
+    let inp = jQuery("#src" + ns);
+    if (inp.size() > 0) {
+        let answer = inp.val();
+        front_get("/admin/source/" + ns + "/" + string_to_XS(answer));
     }
 }
 

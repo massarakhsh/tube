@@ -156,7 +156,7 @@ func (rule *DataRule) adminControlCommand(canal *one.Canal) likdom.Domer {
 func (rule *DataRule) adminCmd(prompt string, text string, cmd string) likdom.Domer {
 	row := likdom.BuildItem("tr")
 	row.BuildTdClass("title").BuildString(prompt)
-	row.BuildTdClass("info").AppendItem(LinkTextProc("cmd", text, fmt.Sprintf("tube_control('%s')", cmd)))
+	row.BuildTdClass("info").AppendItem(LinkTextProc("cmd", text, fmt.Sprintf("tube_command('%s')", cmd)))
 	return row
 }
 
@@ -194,6 +194,10 @@ func (rule *DataRule) ExecAdmin() {
 		if rule.ItPage.Variant > 0 {
 			rule.adminName()
 		}
+	} else if rule.IsShift("source") {
+		if rule.ItPage.Variant > 0 {
+			rule.adminSource()
+		}
 	}
 }
 
@@ -229,7 +233,7 @@ func (rule *DataRule) adminWrite() {
 		canal.Generate = rand.Intn(1000000000)
 		canal.Update()
 		rule.ItPage.Variant = 0
-		rule.SetGoPart(rule.PageGetPath())
+		rule.PageRedraw()
 	}
 }
 
@@ -242,13 +246,13 @@ func (rule *DataRule) adminCreate() {
 	canal.Generate = rand.Intn(1000000000)
 	canal.Format = "1"
 	canal.Create()
-	rule.SetGoPart(rule.PageGetPath())
+	rule.PageRedraw()
 }
 
 func (rule *DataRule) adminDelete() {
 	if canal,ok := one.GetCanalName(rule.ItPage.Canal, rule.ItPage.Variant); ok {
 		canal.Delete()
-		rule.SetGoPart(rule.PageGetPath())
+		rule.PageRedraw()
 	}
 }
 
@@ -258,7 +262,7 @@ func (rule *DataRule) adminFormat() {
 			canal.Format = val
 			canal.Generate = rand.Intn(1000000000)
 			canal.Update()
-			rule.SetGoPart(rule.PageGetPath())
+			rule.PageRedraw()
 		}
 	}
 }
@@ -270,7 +274,7 @@ func (rule *DataRule) adminCode() {
 			canal.Generate = rand.Intn(1000000000)
 			canal.Update()
 			rule.ItPage.Canal = val
-			rule.SetGoPart(rule.PageGetPath())
+			rule.PageRedraw()
 		}
 	}
 }
@@ -281,7 +285,27 @@ func (rule *DataRule) adminName() {
 			canal.Name = val
 			canal.Generate = rand.Intn(1000000000)
 			canal.Update()
-			rule.SetGoPart(rule.PageGetPath())
+			rule.PageRedraw()
+		}
+	}
+}
+
+func (rule *DataRule) adminSource() {
+	if canal,ok := one.GetCanalName(rule.ItPage.Canal, rule.ItPage.Variant); ok {
+		if ns := lik.StrToInt(rule.Shift()); ns >= 0 && ns < 4 {
+			val := lik.StringFromXS(rule.Shift())
+			if ns == 0 {
+				canal.Source0 = val
+			} else if ns == 1 {
+				canal.Source1 = val
+			} else if ns == 2 {
+				canal.Source2 = val
+			} else if ns == 3 {
+				canal.Source3 = val
+			}
+			canal.Generate = rand.Intn(1000000000)
+			canal.Update()
+			rule.PageRedraw()
 		}
 	}
 }

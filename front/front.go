@@ -54,10 +54,6 @@ func (rule *DataRule) BuildFront() (int,lik.Seter) {
 		rule.ExecAdmin()
 	} else if rule.IsShift("canal") {
 		rule.ExecCanal()
-	//} else if rule.IsShift("tune") {
-	//	rule.doTune()
-	//} else if rule.IsShift("media") {
-	//	rule.doMedia()
 	}
 	return 200, rule.GetAllResponse()
 }
@@ -70,20 +66,20 @@ func (rule *DataRule) doMarshal() {
 		rule.SetGoPart(rule.ItPage.ToPath)
 		rule.ItPage.ToPath = ""
 	} else if _,_,need := rule.ItPage.GetSizeFix(); need {
+		rule.ItPage.NeedDraw = true
+	}
+	if rule.ItPage.NeedDraw {
+		rule.ItPage.NeedDraw = false
 		rule.PageRedraw()
 	}
 	if rule.ItPage.NeedUrl {
 		rule.ItPage.NeedUrl = false
-		rule.SetClientPath()
+		rule.SetOnPart(rule.PageGetPath())
 	}
 }
 
 func (rule *DataRule) PageRedraw() {
 	rule.StorePage()
-}
-
-func (rule *DataRule) SetClientPath() {
-	rule.SetOnPart("/" + rule.ItPage.Canal)
 }
 
 func (rule *DataRule) collectParms(prefix string) lik.Seter {
@@ -114,10 +110,6 @@ func (rule *DataRule) GenPage() likdom.Domer {
 	return div
 }
 
-func (rule *DataRule) PageSeekPath() {
-	rule.PageSetPath(rule.PageGetPath())
-}
-
 func (rule *DataRule) PageSetPath(path string) {
 	parts := lik.PathToNames(path)
 	canal := "common"
@@ -130,6 +122,10 @@ func (rule *DataRule) PageSetPath(path string) {
 			parts = parts[1:]
 		}
 	}
+	rule.PageSetCanal(canal, variant)
+}
+
+func (rule *DataRule) PageSetCanal(canal string, variant int) {
 	if canal != rule.ItPage.Canal {
 		rule.SetCookie(canal,"canal")
 		rule.ItPage.Canal = canal
@@ -157,7 +153,7 @@ func (rule *DataRule) BuildSidebar() likdom.Domer {
 	div := likdom.BuildItem("div", "class=sidebar")
 	ul := div.BuildItem("ul","id=topon")
 	ul.BuildItem("li","class=topon").
-		BuildItem("a","title=Настройка", "href=#", "onclick=tube_control('/admin/control')")
+		BuildItem("a","title=Настройка", "href=#", "onclick=tube_command('/admin/control')")
 	return div
 }
 

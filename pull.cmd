@@ -1,6 +1,6 @@
-$! /bin/bash
+#! /bin/sh
 cd ..\lik
 git pull
 cd ..\tube
 git pull
-pause
+#pause

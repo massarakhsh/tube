@@ -23,6 +23,7 @@ type DataPage struct {
 	Canal      string
 	Variant    int
 	ToPath     string
+	NeedDraw   bool
 	NeedUrl    bool
 	NeedResize bool
 	IsControl  bool
