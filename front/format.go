@@ -3,11 +3,12 @@ package front
 type Format struct {
 	Code	string
 	Name	string
+	Count	int
 }
 
 var listFormats = []Format {
-	{ "1", "Одно окно"},
-	{ "4", "Четыре окна"},
+	{ "1", "Одно окно", 1},
+	{ "4", "Четыре окна", 4},
 }
 
 func GetListFormats() []Format {

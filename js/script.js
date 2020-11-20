@@ -178,10 +178,18 @@ function tube_name(value) {
 }
 
 function tube_source(ns) {
-    let inp = jQuery("#src" + ns);
-    if (inp.size() > 0) {
-        let answer = inp.val();
-        front_get("/admin/source/" + ns + "/" + string_to_XS(answer));
-    }
+    front_get("/admin/source/" + ns);
+}
+
+function tube_path(path) {
+    front_get("/admin/path/" + string_to_XS(path));
+}
+
+function tube_file(path) {
+    front_get("/admin/file/" + string_to_XS(path));
+}
+
+function tube_direct(path) {
+    front_get("/admin/direct/" + string_to_XS(path));
 }
 

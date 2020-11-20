@@ -19,10 +19,10 @@ func (rule *DataRule) AdminGen(sx int, sy int) likdom.Domer {
 
 func (rule *DataRule) adminLeft(sx int, sy int) likdom.Domer {
 	code := likdom.BuildTableClass("fill")
-	dy := sy / 3 - BD
-	code.BuildTrTdClass("control", MakeSizes(sx, dy)...).AppendItem(rule.CanalsList(sx, dy))
-	code.BuildTrTdClass("control", MakeSizes(sx, dy)...).AppendItem(rule.AdminControl(sx, dy))
-	code.BuildTrTdClass("control", MakeSizes(sx, dy)...).AppendItem(rule.adminNo(sx, dy))
+	dy := sy / 2 - BD
+	code.BuildTrTdClass("win_control", MakeSizes(sx, dy)...).AppendItem(rule.CanalsList(sx, dy))
+	code.BuildTrTdClass("win_control", MakeSizes(sx, dy)...).AppendItem(rule.AdminControl(sx, dy))
+	code.BuildTrTd("height=100%")
 	return code
 }
 
@@ -30,7 +30,7 @@ func (rule *DataRule) adminRight(sx int, sy int) likdom.Domer {
 	code := likdom.BuildTableClass("fill")
 	dy := sy / 2 - BD
 	code.BuildTrTdClass("control", MakeSizes(sx, dy)...).AppendItem(rule.AdminShow(sx, dy))
-	code.BuildTrTdClass("control", MakeSizes(sx, dy)...).AppendItem(rule.adminNo(sx, dy))
+	code.BuildTrTdClass("control", MakeSizes(sx, dy)...).AppendItem(rule.MediaShow(sx, dy))
 	return code
 }
 
@@ -64,7 +64,7 @@ func (rule *DataRule) AdminControl(sx int, sy int) likdom.Domer {
 			tbl.BuildTrTd().AppendItem(rule.adminControlCommand(&canal))
 		}
 	} else {
-		tbl.AppendItem(rule.adminCmd("&nbsp;*&nbsp;", "Создать новый", "create"))
+		tbl.AppendItem(rule.adminCmd("*", "Создать новый", "create"))
 	}
 	return MakeWindow("win_control", sx, sy, title, tbl)
 }
@@ -98,10 +98,13 @@ func (rule *DataRule) adminControlEdit(canal *one.Canal) likdom.Domer {
 		sel.AppendItem(LinkTextProc("cmd", "Изменить", fmt.Sprintf("tube_name('%s')", canal.Name)))
 		row.BuildTdClass("info").BuildItem("nobr").AppendItem(sel)
 	}
+	count := 0
 	if row := tbl.BuildTr(); row != nil {
 		row.BuildTdClass("title").BuildString("Формат:")
 		sf := canal.Format
-		if GetFormat(sf) == nil {
+		if format := GetFormat(sf); format != nil {
+			count = format.Count
+		} else {
 			sf = ""
 		}
 		sel := likdom.BuildItem("select", "onchange='tube_format(this)'")
@@ -118,7 +121,7 @@ func (rule *DataRule) adminControlEdit(canal *one.Canal) likdom.Domer {
 		row.BuildTdClass("info").BuildItem("nobr").AppendItem(sel)
 	}
 	tbl.BuildTrTd("colspan=2").BuildString("<hr>")
-	for ns := 0; ns < 4; ns++ {
+	for ns := 0; ns < count; ns++ {
 		if row := tbl.BuildTr(); row != nil {
 			row.BuildTdClass("title").BuildString(fmt.Sprintf("Окно %d", 1 + ns))
 			sel := likdom.BuildSpace()
@@ -132,9 +135,10 @@ func (rule *DataRule) adminControlEdit(canal *one.Canal) likdom.Domer {
 			} else if ns == 3 {
 				path = canal.Source3
 			}
-			input := sel.BuildUnpairItem("input", "type=text", "id", fmt.Sprintf("src%d", ns))
 			if path != "" {
-				input.SetAttr("value", path)
+				sel.BuildItemClass("B", "edit").BuildString(path)
+			} else {
+				sel.BuildString("(пусто)")
 			}
 			sel.BuildString("&nbsp;&nbsp;")
 			sel.AppendItem(LinkTextProc("cmd", "Изменить", fmt.Sprintf("tube_source(%d)", ns)))
@@ -198,6 +202,12 @@ func (rule *DataRule) ExecAdmin() {
 		if rule.ItPage.Variant > 0 {
 			rule.adminSource()
 		}
+	} else if rule.IsShift("path") {
+		rule.MediaDoPath(lik.StringFromXS(rule.Shift()))
+	} else if rule.IsShift("direct") {
+		rule.MediaDoDirect(lik.StringFromXS(rule.Shift()))
+	} else if rule.IsShift("file") {
+		rule.MediaDoFile(lik.StringFromXS(rule.Shift()))
 	}
 }
 
@@ -293,7 +303,10 @@ func (rule *DataRule) adminName() {
 func (rule *DataRule) adminSource() {
 	if canal,ok := one.GetCanalName(rule.ItPage.Canal, rule.ItPage.Variant); ok {
 		if ns := lik.StrToInt(rule.Shift()); ns >= 0 && ns < 4 {
-			val := lik.StringFromXS(rule.Shift())
+			val := rule.ItPage.FilePath
+			if val != "" {
+				val = dirMain + val
+			}
 			if ns == 0 {
 				canal.Source0 = val
 			} else if ns == 1 {

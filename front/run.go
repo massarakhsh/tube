@@ -32,6 +32,10 @@ type DataPage struct {
 	IdCanal    lik.IDB
 	ASX, ASY   int
 	ACX, ACY   int
+	AMX, AMY   int
+	APX, APY   int
+	DirPath		string
+	FilePath	string
 }
 
 type DataPager interface {

@@ -54,6 +54,16 @@ table.oferta {
 	background: #888;
 }
 
+td.win_canals {
+	text-align: left;
+	vertical-align: top;
+}
+
+td.win_medias {
+	text-align: left;
+	vertical-align: top;
+}
+
 td.win_control {
 	text-align: left;
 	vertical-align: top;
@@ -162,10 +172,18 @@ ul#topon .topon a {
 	cursor: pointer;
 	float: right;
 	text-decoration: none;
-	font-style: italic;
+	font-size: 11pt;
 	font-weight: bold;
-	color: #06c;
+	color: #038;
 }
+.cmdf {
+	float: left;
+}
+.cmdd {
+	float: left;
+	color: #55a;
+}
+
 
 .cmd:hover {
 	text-decoration: underline;

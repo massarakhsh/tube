@@ -1,6 +1,7 @@
 package front
 
 import (
+	"fmt"
 	"github.com/massarakhsh/lik"
 	"github.com/massarakhsh/lik/likdom"
 	"github.com/massarakhsh/lik/liktable"
@@ -57,8 +58,11 @@ func (rule *DataRule) canalsBuildList() lik.Lister {
 	var canals []one.Canal
 	one.DBCanal().Find(&canals)
 	for _, canal := range canals {
-		title := MakeNamelyCanal(canal.Name, canal.Variant)
-		list.AddItemSet("id", canal.Id, "code", canal.Code, "name", title)
+		code := canal.Code
+		if canal.Variant > 0 {
+			code += fmt.Sprintf(" (%d)", canal.Variant)
+		}
+		list.AddItemSet("id", canal.Id, "code", code, "name", canal.Name)
 		if canal.Code == rule.ItPage.Canal {
 			rule.ItPage.IdCanal = lik.IDB(canal.Id)
 		}
