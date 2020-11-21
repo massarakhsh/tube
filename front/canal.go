@@ -45,8 +45,8 @@ func (rule *DataRule) canalsListSelect() {
 		if canal,ok := one.GetCanal(id); ok {
 			rule.ItPage.Canal = canal.Code
 			rule.ItPage.Variant = canal.Variant
-			rule.StoreItem(rule.AdminShow(rule.ItPage.ASX, rule.ItPage.ASY))
-			rule.StoreItem(rule.AdminControl(rule.ItPage.ACX, rule.ItPage.ACY))
+			rule.AdminReControl()
+			rule.AdminReShow()
 			rule.SetOnPart("/" + canal.Code)
 		}
 

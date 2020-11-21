@@ -38,10 +38,13 @@ func (rule *DataRule) adminNo(sx int, sy int) likdom.Domer {
 	return rule.VisualMessage("NO")
 }
 
+func (rule *DataRule) AdminReShow() {
+	rule.StoreItem(rule.AdminShow(rule.ItPage.AdminSize.Sx, rule.ItPage.AdminSize.Sy))
+}
+
 func (rule *DataRule) AdminShow(sx int, sy int) likdom.Domer {
 	var text string
-	rule.ItPage.ASX = sx
-	rule.ItPage.ASY = sy
+	rule.ItPage.AdminSize = Size{sx, sy}
 	if canal,ok := one.GetCanalName(rule.ItPage.Canal, rule.ItPage.Variant); ok {
 		text = canal.Name
 		if text == "" { text = rule.ItPage.Canal }
@@ -51,9 +54,12 @@ func (rule *DataRule) AdminShow(sx int, sy int) likdom.Domer {
 	return MakeWindow("win_admshow", sx, sy, text, rule.VisualGen(sx, sy - 24 - BD))
 }
 
+func (rule *DataRule) AdminReControl() {
+	rule.StoreItem(rule.AdminControl(rule.ItPage.ControlSize.Sx, rule.ItPage.ControlSize.Sy))
+}
+
 func (rule *DataRule) AdminControl(sx int, sy int) likdom.Domer {
-	rule.ItPage.ACX = sx
-	rule.ItPage.ACY = sy
+	rule.ItPage.ControlSize = Size{sx, sy}
 	tbl := likdom.BuildTable()
 	title := "Новый канал"
 	if canal,ok := one.GetCanalName(rule.ItPage.Canal, rule.ItPage.Variant); ok {
@@ -202,12 +208,6 @@ func (rule *DataRule) ExecAdmin() {
 		if rule.ItPage.Variant > 0 {
 			rule.adminSource()
 		}
-	} else if rule.IsShift("path") {
-		rule.MediaDoPath(lik.StringFromXS(rule.Shift()))
-	} else if rule.IsShift("direct") {
-		rule.MediaDoDirect(lik.StringFromXS(rule.Shift()))
-	} else if rule.IsShift("file") {
-		rule.MediaDoFile(lik.StringFromXS(rule.Shift()))
 	}
 }
 
@@ -305,7 +305,7 @@ func (rule *DataRule) adminSource() {
 		if ns := lik.StrToInt(rule.Shift()); ns >= 0 && ns < 4 {
 			val := rule.ItPage.FilePath
 			if val != "" {
-				val = dirMain + val
+				val = "/" + dirMain + val
 			}
 			if ns == 0 {
 				canal.Source0 = val

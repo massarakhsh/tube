@@ -22,20 +22,35 @@ type DataPage struct {
 	Session    *DataSession
 	Canal      string
 	Variant    int
+	Generate	int
 	ToPath     string
 	NeedDraw   bool
 	NeedUrl    bool
 	NeedResize bool
+	NeedImage  bool
 	IsControl  bool
+	IsLoad	   bool
 	PathAdmin  []string
 	ListCanals *liktable.Table
 	IdCanal    lik.IDB
-	ASX, ASY   int
-	ACX, ACY   int
-	AMX, AMY   int
-	APX, APY   int
+	MediaSize		Size
+	BrowserSize		Size
+	ImageSize		Size
+	AdminSize		Size
+	ControlSize		Size
 	DirPath		string
 	FilePath	string
+	Upload		[]Pot
+	LoadSync	sync.Mutex
+}
+
+type Pot struct {
+	Name	string
+	Data	[]byte
+}
+
+type Size struct {
+	Sx, Sy	int
 }
 
 type DataPager interface {

@@ -168,6 +168,15 @@ ul#topon .topon a {
 	background-image: url(/images/options.png);
 }
 
+.mediacmd {
+	width: 100%;
+}
+.mediacmd td {
+	background: #ddd;
+	border: 1px solid #fff;
+	padding: 1px 8px;
+}
+
 .cmd {
 	cursor: pointer;
 	float: right;
@@ -183,7 +192,6 @@ ul#topon .topon a {
 	float: left;
 	color: #55a;
 }
-
 
 .cmd:hover {
 	text-decoration: underline;

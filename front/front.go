@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/massarakhsh/lik"
 	"github.com/massarakhsh/lik/likdom"
+	"github.com/massarakhsh/tube/one"
 	"strings"
 )
 
@@ -52,6 +53,8 @@ func (rule *DataRule) BuildFront() (int,lik.Seter) {
 		rule.doMarshal()
 	} else if rule.IsShift("admin") {
 		rule.ExecAdmin()
+	} else if rule.IsShift("media") {
+		rule.ExecMedia()
 	} else if rule.IsShift("canal") {
 		rule.ExecCanal()
 	}
@@ -67,10 +70,16 @@ func (rule *DataRule) doMarshal() {
 		rule.ItPage.ToPath = ""
 	} else if _,_,need := rule.ItPage.GetSizeFix(); need {
 		rule.ItPage.NeedDraw = true
+	} else if canal,ok := one.GetCanalName(rule.ItPage.Canal, rule.ItPage.Variant); ok && rule.ItPage.Generate != canal.Generate {
+		rule.ItPage.NeedDraw = true
 	}
 	if rule.ItPage.NeedDraw {
 		rule.ItPage.NeedDraw = false
 		rule.PageRedraw()
+	}
+	if rule.ItPage.NeedImage {
+		rule.ItPage.NeedImage = false
+		rule.MediaImageShow()
 	}
 	if rule.ItPage.NeedUrl {
 		rule.ItPage.NeedUrl = false

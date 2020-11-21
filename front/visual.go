@@ -15,29 +15,71 @@ import (
 func (rule *DataRule) VisualGen(sx int, sy int) likdom.Domer {
 	var code likdom.Domer
 	if name := rule.ItPage.Canal; name == "" {
-	} else if canal,ok := one.GetCanalName(name, rule.ItPage.Variant); ok {
-		code = rule.VisualGenCanal(sx, sy, &canal)
-	} else {
+	} else if canal,ok := one.GetCanalName(name, rule.ItPage.Variant); !ok {
 		code = rule.CanalNoCanal(name)
+	} else {
+		rule.ItPage.Generate = canal.Generate
+		if canal.Format == "1" {
+			code = rule.VisualFormat1(sx, sy, &canal)
+		} else if canal.Format == "2" {
+			code = rule.VisualFormat2(sx, sy, &canal)
+		} else if canal.Format == "12" {
+			code = rule.VisualFormat12(sx, sy, &canal)
+		} else if canal.Format == "21" {
+			code = rule.VisualFormat21(sx, sy, &canal)
+		} else if canal.Format == "4" {
+			code = rule.VisualFormat4(sx, sy, &canal)
+		} else {
+			code = rule.VisualMessage(fmt.Sprintf("Неизвестный формат \"<b>%s</b>\"", canal.Format))
+		}
 	}
 	return MakeWindow("win_visual", sx, sy, "", code)
 }
 
-func (rule *DataRule) VisualGenCanal(sx int, sy int, canal *one.Canal) likdom.Domer {
-	var code likdom.Domer
-	if canal == nil {
-	} else if canal.Format == "1" {
-		code = rule.VisualFormat1(sx, sy, canal)
-	} else if canal.Format == "4" {
-		code = rule.VisualFormat4(sx, sy, canal)
-	} else {
-		code = rule.VisualMessage(fmt.Sprintf("Неизвестный формат \"<b>%s</b>\"", canal.Format))
+func (rule *DataRule) VisualFormat1(sx int, sy int, canal *one.Canal) likdom.Domer {
+	return rule.VisualSource(sx, sy, canal.Source0)
+}
+
+func (rule *DataRule) VisualFormat2(sx int, sy int, canal *one.Canal) likdom.Domer {
+	dx := sx / 2 - BD
+	code := likdom.BuildTableClass("fill")
+	if row := code.BuildTr(); row != nil {
+		row.BuildTd(MakeSizes(dx, sy)...).AppendItem(rule.VisualSource(dx, sy, canal.Source0))
+		row.BuildTd(MakeSizes(dx, sy)...).AppendItem(rule.VisualSource(dx, sy, canal.Source1))
 	}
 	return code
 }
 
-func (rule *DataRule) VisualFormat1(sx int, sy int, canal *one.Canal) likdom.Domer {
-	return rule.VisualSource(sx, sy, canal.Source0)
+func (rule *DataRule) VisualFormat12(sx int, sy int, canal *one.Canal) likdom.Domer {
+	dx := sx / 2 - BD
+	dy := sy / 2 - BD
+	code := likdom.BuildTableClass("fill")
+	if row := code.BuildTr(); row != nil {
+		td := row.BuildTd(MakeSizes(dx, dy)...)
+		td.SetAttr("rowspan=2")
+		td.AppendItem(rule.VisualSource(dx, dy, canal.Source0))
+		row.BuildTd(MakeSizes(dx, dy)...).AppendItem(rule.VisualSource(dx, dy, canal.Source1))
+	}
+	if row := code.BuildTr(); row != nil {
+		row.BuildTd(MakeSizes(dx, dy)...).AppendItem(rule.VisualSource(dx, dy, canal.Source2))
+	}
+	return code
+}
+
+func (rule *DataRule) VisualFormat21(sx int, sy int, canal *one.Canal) likdom.Domer {
+	dx := sx / 2 - BD
+	dy := sy / 2 - BD
+	code := likdom.BuildTableClass("fill")
+	if row := code.BuildTr(); row != nil {
+		row.BuildTd(MakeSizes(dx, dy)...).AppendItem(rule.VisualSource(dx, dy, canal.Source0))
+		td := row.BuildTd(MakeSizes(dx, dy)...)
+		td.SetAttr("rowspan=2")
+		td.AppendItem(rule.VisualSource(dx, dy, canal.Source1))
+	}
+	if row := code.BuildTr(); row != nil {
+		row.BuildTd(MakeSizes(dx, dy)...).AppendItem(rule.VisualSource(dx, dy, canal.Source2))
+	}
+	return code
 }
 
 func (rule *DataRule) VisualFormat4(sx int, sy int, canal *one.Canal) likdom.Domer {
@@ -46,10 +88,10 @@ func (rule *DataRule) VisualFormat4(sx int, sy int, canal *one.Canal) likdom.Dom
 	code := likdom.BuildTableClass("fill")
 	if row := code.BuildTr(); row != nil {
 		row.BuildTd(MakeSizes(dx, dy)...).AppendItem(rule.VisualSource(dx, dy, canal.Source0))
-		row.BuildTd(MakeSizes(dx, dy)...).AppendItem(rule.VisualSource(dx, dy, canal.Source1))
+		row.BuildTd(MakeSizes(dx, dy)...).AppendItem(rule.VisualSource(dx, dy, canal.Source2))
 	}
 	if row := code.BuildTr(); row != nil {
-		row.BuildTd(MakeSizes(dx, dy)...).AppendItem(rule.VisualSource(dx, dy, canal.Source2))
+		row.BuildTd(MakeSizes(dx, dy)...).AppendItem(rule.VisualSource(dx, dy, canal.Source1))
 		row.BuildTd(MakeSizes(dx, dy)...).AppendItem(rule.VisualSource(dx, dy, canal.Source3))
 	}
 	return code

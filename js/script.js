@@ -181,15 +181,27 @@ function tube_source(ns) {
     front_get("/admin/source/" + ns);
 }
 
-function tube_path(path) {
-    front_get("/admin/path/" + string_to_XS(path));
+function media_path(path) {
+    front_get("/media/path/" + string_to_XS(path));
 }
 
-function tube_file(path) {
-    front_get("/admin/file/" + string_to_XS(path));
+function media_file(path) {
+    front_get("/media/file/" + string_to_XS(path));
 }
 
-function tube_direct(path) {
-    front_get("/admin/direct/" + string_to_XS(path));
+function media_load() {
+    front_get("/media/load");
+}
+
+function media_delete() {
+    front_get("/media/delete");
+}
+
+function media_store() {
+    front_get("/media/store");
+}
+
+function media_cancel() {
+    front_get("/media/cancel");
 }
 
