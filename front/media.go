@@ -25,20 +25,22 @@ func (rule *DataRule) MediaReShow() {
 
 func (rule *DataRule) MediaShow(sx int, sy int) likdom.Domer {
 	rule.ItPage.MediaSize = Size{sx, sy}
-	code := likdom.BuildTableClassId("fill", "win_media")
-	dx := sx /2 - BD
-	dy := sy - 32
-	code.BuildTrTd("colspan=2").AppendItem(rule.mediaCommands())
-	row := code.BuildTr()
-	if !rule.ItPage.IsLoad {
+	tbl := likdom.BuildTableClassId("fill", "win_media")
+	tbl.BuildTrTd().AppendItem(rule.mediaCommands())
+	lev := len(lik.PathToNames(rule.ItPage.DirPath))
+	tbl.BuildTrTd().AppendItem(rule.mediaPath(sx, lev * 24))
+	tbl.BuildTrTd().BuildString("<hr>")
+	dy := sy - 60 - lev * 24
+	td := tbl.BuildTrTd(MakeSizes(sx, dy)...)
+	if rule.ItPage.IsLoad {
+		td.AppendItem(rule.mediaLoad(sx, dy))
+	} else {
+		dx := sx / 2 - BD
+		row := td.BuildTableClass("fill")
 		row.BuildTd(MakeSizes(dx, dy)...).AppendItem(rule.mediaBrowser(dx, dy))
 		row.BuildTd(MakeSizes(dx, dy)...).AppendItem(rule.mediaImage(dx, dy))
-	} else {
-		td := row.BuildTd("colspan=2")
-		td.SetAttr(MakeSizes(sx, dy)...)
-		td.AppendItem(rule.mediaLoad(sx, dy))
 	}
-	return code
+	return tbl
 }
 
 func (rule *DataRule) mediaReCommand() {
@@ -67,15 +69,9 @@ func (rule *DataRule) MediaReBrowser() {
 
 func (rule *DataRule) mediaBrowser(sx int, sy int) likdom.Domer {
 	rule.ItPage.BrowserSize = Size{sx, sy}
-	tbl := likdom.BuildTable("width=100%", "id=win_browser")
-	lev := len(lik.PathToNames(rule.ItPage.DirPath))
-	tbl.BuildTrTd().AppendItem(rule.mediaPath(sx, lev*20))
-	tbl.BuildTrTd().BuildString("<hr>")
-	if !rule.ItPage.IsLoad {
-		tbl.BuildTrTd().AppendItem(rule.mediaFiles(sx, sy-20-lev*20))
-	} else {
-	}
-	return tbl
+	container := likdom.BuildDiv("id=win_browser", "style", fmt.Sprintf("height:%dpx; overflow-x:scroll; overflow-y:scroll;", sy))
+	container.AppendItem(rule.mediaFiles(sx, sy))
+	return container
 }
 
 func (rule *DataRule) MediaReImage() {
@@ -85,7 +81,7 @@ func (rule *DataRule) MediaReImage() {
 func (rule *DataRule) mediaImage(sx int, sy int) likdom.Domer {
 	rule.ItPage.ImageSize = Size{sx, sy}
 	div := likdom.BuildDivClassId("win_visual", "win_preview")
-	div.AppendItem(rule.VisualSource(sx - 8, sy - 8, dirMain + rule.ItPage.FilePath))
+	div.AppendItem(rule.VisualSource(sx - 8, sy - 8, "/" + dirMain + rule.ItPage.FilePath))
 	return div
 }
 
@@ -122,11 +118,10 @@ func (rule *DataRule) mediaPath(sx int, sy int) likdom.Domer {
 }
 
 func (rule *DataRule) mediaFiles(sx int, sy int) likdom.Domer {
-	container := likdom.BuildDiv("style", fmt.Sprintf("height:%dpx; overflow-x:scroll; overflow-y:scroll;", sy))
-	tbl := container.BuildTable("width=100%")
+	tbl := likdom.BuildTable("width=100%")
 	if files, err := ioutil.ReadDir(dirMain + rule.ItPage.DirPath); err == nil {
 		sort.Slice(files, func(i,j int) bool {
-			return files[i].Name() >= files[j].Name()
+			return files[i].Name() <= files[j].Name()
 		})
 		for fase := 0; fase < 2; fase++ {
 			for _, file := range files {
@@ -145,7 +140,7 @@ func (rule *DataRule) mediaFiles(sx int, sy int) likdom.Domer {
 			}
 		}
 	}
-	return container
+	return tbl
 }
 
 func (rule *DataRule) ExecMedia() {
@@ -200,7 +195,7 @@ func (rule *DataRule) mediaDoUpload() {
 func (rule *DataRule) mediaDoStore() {
 	for _,pot := range rule.ItPage.Upload {
 		file := lik.Transliterate(pot.Name)
-		path := dirMain + "/" + file
+		path := dirMain + rule.ItPage.DirPath + "/" + file
 		_ = ioutil.WriteFile(path, pot.Data, 0666)
 	}
 	rule.ItPage.IsLoad = false
