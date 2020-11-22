@@ -55,9 +55,9 @@ func (rule *DataRule) VisualFormat12(sx int, sy int, canal *one.Canal) likdom.Do
 	dy := sy / 2 - BD
 	code := likdom.BuildTableClass("fill")
 	if row := code.BuildTr(); row != nil {
-		td := row.BuildTd(MakeSizes(dx, dy)...)
+		td := row.BuildTd(MakeSizes(dx, sy)...)
 		td.SetAttr("rowspan=2")
-		td.AppendItem(rule.VisualSource(dx, dy, canal.Source0))
+		td.AppendItem(rule.VisualSource(dx, sy, canal.Source0))
 		row.BuildTd(MakeSizes(dx, dy)...).AppendItem(rule.VisualSource(dx, dy, canal.Source1))
 	}
 	if row := code.BuildTr(); row != nil {
@@ -72,9 +72,9 @@ func (rule *DataRule) VisualFormat21(sx int, sy int, canal *one.Canal) likdom.Do
 	code := likdom.BuildTableClass("fill")
 	if row := code.BuildTr(); row != nil {
 		row.BuildTd(MakeSizes(dx, dy)...).AppendItem(rule.VisualSource(dx, dy, canal.Source0))
-		td := row.BuildTd(MakeSizes(dx, dy)...)
+		td := row.BuildTd(MakeSizes(dx, sy)...)
 		td.SetAttr("rowspan=2")
-		td.AppendItem(rule.VisualSource(dx, dy, canal.Source1))
+		td.AppendItem(rule.VisualSource(dx, sy, canal.Source1))
 	}
 	if row := code.BuildTr(); row != nil {
 		row.BuildTd(MakeSizes(dx, dy)...).AppendItem(rule.VisualSource(dx, dy, canal.Source2))
@@ -101,7 +101,7 @@ func (rule *DataRule) VisualSource(sx int, sy int, source string) likdom.Domer {
 	var code likdom.Domer
 	if lik.RegExCompare(strings.ToLower(source), "(jpg|png|gif)$") {
 		code = rule.VisualImage(sx, sy, source)
-	} else if lik.RegExCompare(strings.ToLower(source), "(avi|mpg|mts)$") {
+	} else if lik.RegExCompare(strings.ToLower(source), "(avi|mpg|mp4|mts)$") {
 		code = rule.VisualVideo(sx, sy, source)
 	}
 	return code
