@@ -12,8 +12,7 @@
   <component name="ChangeListManager">
     <list default="true" id="ad175b9f-026c-4b7c-b9bc-ce25431e07f6" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/media.go" beforeDir="false" afterPath="$PROJECT_DIR$/front/media.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/var/log/info" beforeDir="false" afterPath="$PROJECT_DIR$/var/log/info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/visual.go" beforeDir="false" afterPath="$PROJECT_DIR$/front/visual.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
