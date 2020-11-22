@@ -41,7 +41,7 @@ func (rule *DataRule) VisualFormat1(sx int, sy int, canal *one.Canal) likdom.Dom
 }
 
 func (rule *DataRule) VisualFormat2(sx int, sy int, canal *one.Canal) likdom.Domer {
-	dx := sx / 2 - BD - 1
+	dx := sx / 2 - BD - 2
 	code := likdom.BuildTableClass("fill")
 	if row := code.BuildTr(); row != nil {
 		row.BuildTd(MakeSizes(dx, sy)...).AppendItem(rule.VisualSource(dx, sy, canal.Source0))
@@ -51,8 +51,8 @@ func (rule *DataRule) VisualFormat2(sx int, sy int, canal *one.Canal) likdom.Dom
 }
 
 func (rule *DataRule) VisualFormat12(sx int, sy int, canal *one.Canal) likdom.Domer {
-	dx := sx / 2 - BD - 1
-	dy := sy / 2 - BD - 1
+	dx := sx / 2 - BD - 2
+	dy := sy / 2 - BD - 2
 	code := likdom.BuildTableClass("fill")
 	if row := code.BuildTr(); row != nil {
 		td := row.BuildTd(MakeSizes(dx, sy)...)
@@ -67,8 +67,8 @@ func (rule *DataRule) VisualFormat12(sx int, sy int, canal *one.Canal) likdom.Do
 }
 
 func (rule *DataRule) VisualFormat21(sx int, sy int, canal *one.Canal) likdom.Domer {
-	dx := sx / 2 - BD - 1
-	dy := sy / 2 - BD - 1
+	dx := sx / 2 - BD - 2
+	dy := sy / 2 - BD - 2
 	code := likdom.BuildTableClass("fill")
 	if row := code.BuildTr(); row != nil {
 		row.BuildTd(MakeSizes(dx, dy)...).AppendItem(rule.VisualSource(dx, dy, canal.Source0))
@@ -83,8 +83,8 @@ func (rule *DataRule) VisualFormat21(sx int, sy int, canal *one.Canal) likdom.Do
 }
 
 func (rule *DataRule) VisualFormat4(sx int, sy int, canal *one.Canal) likdom.Domer {
-	dx := sx / 2 - BD - 1
-	dy := sy / 2 - BD - 1
+	dx := sx / 2 - BD - 2
+	dy := sy / 2 - BD - 2
 	code := likdom.BuildTableClass("fill")
 	if row := code.BuildTr(); row != nil {
 		row.BuildTd(MakeSizes(dx, dy)...).AppendItem(rule.VisualSource(dx, dy, canal.Source0))
