@@ -75,9 +75,9 @@ func router(w http.ResponseWriter, r *http.Request) {
 		lik.SayInfo(r.RequestURI)
 	}
 	if rule.IsShift("front") {
-		rc, json := rule.BuildFront()
+		_, json := rule.BuildFront()
 		likapi.RouteCookies(w, rule.GetAllCookies())
-		likapi.RouteJson(w, rc, json, rule.ResultFormat)
+		likapi.RouteJson(w, json)
 	} else {
 		rc, html := rule.PageHtml()
 		likapi.RouteCookies(w, rule.GetAllCookies())
@@ -87,11 +87,11 @@ func router(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	if host,err := os.Hostname(); err == nil {
-		if host == "Shaman" {
+		if host == "shaman" {
 			Serv = "192.168.234.62"
-			Base = "rptp"
-			User = "rptp"
-			Pass = "Shaman1961"
+			//Base = "rptp"
+			//User = "rptp"
+			//Pass = "Shaman1961"
 		}
 	}
 	if !getArgs() {

@@ -112,9 +112,9 @@ func (rule *DataRule) GenPage() likdom.Domer {
 	div := likdom.BuildItem("div","id=main", "class=fill")
 	sx,sy := rule.ItPage.GetSize()
 	if rule.ItPage.IsControl {
-		div.AppendItem(rule.AdminGen(sx -BD, sy -BD))
+		div.AppendItem(rule.AdminGen(sx -8-BD, sy -8-BD))
 	} else {
-		div.AppendItem(rule.VisualGen(sx -BD, sy -BD))
+		div.AppendItem(rule.VisualGen(sx -8-BD, sy -8-BD))
 	}
 	return div
 }
