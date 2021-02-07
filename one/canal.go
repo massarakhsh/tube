@@ -14,11 +14,11 @@ type Canal struct {
 	Code        string //	Код
 	Variant     int    //	Вариант
 	Generate    int    //	Генерация
-	Format    	string	 //	Формат
-	Source0   	string   //	ID источника
-	Source1   	string   //	ID источника
-	Source2   	string   //	ID источника
-	Source3   	string   //	ID источника
+	Format      string //	Формат
+	Source0     string //	ID источника
+	Source1     string //	ID источника
+	Source2     string //	ID источника
+	Source3     string //	ID источника
 }
 
 //	Инициализация таблицы
@@ -36,21 +36,21 @@ func DBCanal() *gorm.DB {
 }
 
 //	Получить объект
-func GetCanal(id lik.IDB) (Canal,bool) {
+func GetCanal(id lik.IDB) (Canal, bool) {
 	it := Canal{}
 	ok := likbase.Read(id, &it)
-	return it,ok
+	return it, ok
 }
 
 //	Новый объект
-func NewCanal(datas... interface{}) (Canal,bool) {
+func NewCanal(datas ...interface{}) (Canal, bool) {
 	it := Canal{}
 	ok := likbase.Update(&it, datas...)
-	return it,ok
+	return it, ok
 }
 
 //	Выбрать объекты
-func SelectCanal(query interface{}, args... interface{}) []Canal {
+func SelectCanal(query interface{}, args ...interface{}) []Canal {
 	var canals []Canal
 	if query != nil {
 		DBCanal().Where(query, args...).Find(&canals)
@@ -66,13 +66,13 @@ func (it *Canal) Table() string {
 }
 
 //	Создать
-func (it *Canal) Create(datas... interface{}) bool {
+func (it *Canal) Create(datas ...interface{}) bool {
 	it.Id = 0
 	return likbase.Update(it, datas...)
 }
 
 //	Изменить
-func (it *Canal) Update(datas... interface{}) bool {
+func (it *Canal) Update(datas ...interface{}) bool {
 	return likbase.Update(it, datas...)
 }
 
@@ -88,4 +88,3 @@ func GetCanalName(name string, variant int) (Canal, bool) {
 	}
 	return Canal{}, false
 }
-

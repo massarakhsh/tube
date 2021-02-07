@@ -1,18 +1,21 @@
 package main
 
 import (
-	"github.com/massarakhsh/lik"
-	"github.com/massarakhsh/lik/likapi"
-	"github.com/massarakhsh/tube/front"
 	"fmt"
-	"github.com/massarakhsh/tube/one"
 	"log"
 	"net/http"
 	"os"
+	"strings"
+	"time"
+
+	"github.com/massarakhsh/lik"
+	"github.com/massarakhsh/lik/likapi"
+	"github.com/massarakhsh/tube/front"
+	"github.com/massarakhsh/tube/one"
 )
 
 var (
-	Port int = 80
+	Port int    = 80
 	Serv string = "localhost"
 	Base string = "tube"
 	User string = "tube"
@@ -53,41 +56,46 @@ func getArgs() bool {
 
 func router(w http.ResponseWriter, r *http.Request) {
 	lik.SetLevelInf()
+	start := time.Now()
+	text := r.RequestURI
 	if lik.RegExCompare(r.RequestURI, "\\.(js|css|htm|html|ico|gif|png|jpg|mp3|mp4|mpg|avi)") {
 		likapi.ProbeRouteFile(w, r, r.RequestURI)
-		return
-	}
-	var page *front.DataPage
-	if sp := lik.StrToInt(likapi.GetParm(r, "_sp")); sp > 0 {
-		if pager := likapi.FindPage(sp); pager != nil {
-			page = pager.(front.DataPager).GetItPage()
+	} else {
+		var page *front.DataPage
+		if sp := lik.StrToInt(likapi.GetParm(r, "_sp")); sp > 0 {
+			if pager := likapi.FindPage(sp); pager != nil {
+				page = pager.(front.DataPager).GetItPage()
+			}
+		}
+		if page == nil {
+			page = front.StartPage("")
+		} else if lik.StrToInt(likapi.GetParm(r, "_tp")) > 0 {
+			page = front.ClonePage(page)
+			page.NeedUrl = true
+		}
+		rule := front.BindRule(page)
+		rule.LoadRequest(r)
+		if !lik.RegExCompare(r.RequestURI, "marshal") {
+			//lik.SayInfo(r.RequestURI)
+		}
+		if rule.IsShift("front") {
+			_, json := rule.BuildFront()
+			likapi.RouteCookies(w, rule.GetAllCookies())
+			likapi.RouteJson(w, json)
+		} else {
+			rc, html := rule.PageHtml()
+			likapi.RouteCookies(w, rule.GetAllCookies())
+			likapi.RouteHtml(w, rc, html.ToString())
 		}
 	}
-	if page == nil {
-		page = front.StartPage("")
-	} else if lik.StrToInt(likapi.GetParm(r, "_tp")) > 0 {
-		page = front.ClonePage(page)
-		page.NeedUrl = true
-	}
-	rule := front.BindRule(page)
-	rule.LoadRequest(r)
-	if !lik.RegExCompare(r.RequestURI, "marshal") {
-		lik.SayInfo(r.RequestURI)
-	}
-	if rule.IsShift("front") {
-		_, json := rule.BuildFront()
-		likapi.RouteCookies(w, rule.GetAllCookies())
-		likapi.RouteJson(w, json)
-	} else {
-		rc, html := rule.PageHtml()
-		likapi.RouteCookies(w, rule.GetAllCookies())
-		likapi.RouteHtml(w, rc, html.ToString())
-	}
+	text += fmt.Sprintf(" (%d ms)", time.Now().Sub(start).Milliseconds())
+	lik.SayInfo(text)
 }
 
 func main() {
-	if host,err := os.Hostname(); err == nil {
-		if host == "shaman" {
+	if host, err := os.Hostname(); err == nil {
+		host = strings.ToLower(host)
+		if host == "shaman" || host == "shamaner" {
 			Serv = "192.168.234.62"
 			//Base = "rptp"
 			//User = "rptp"
