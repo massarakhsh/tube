@@ -3,7 +3,7 @@ var script_second = 0;
 function script_start() {
     pool_step.push(script_step);
     if (!lik_trust) lik_set_trust("");
-    if (lik_trust) lik_set_marshal(1000, "/front/marshal");
+    if (lik_trust) lik_set_marshal(3000, "/front/marshal");
     tube_init();
 }
 
